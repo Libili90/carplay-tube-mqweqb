@@ -1,14 +1,25 @@
-import { Platform } from 'react-native';
+
 import { Stack } from 'expo-router';
+import { colors } from '@/styles/commonStyles';
 
 export default function HomeLayout() {
   return (
-    <Stack>
+    <Stack
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: colors.background,
+        },
+        headerTintColor: colors.primary,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          color: colors.text,
+        },
+      }}
+    >
       <Stack.Screen
-        name="index"
+        name='index'
         options={{
-          headerShown: Platform.OS === 'ios', // Show header on iOS with NativeTabs, hide on Android/Web
-          title: 'Home'
+          title: 'YouTube',
         }}
       />
     </Stack>

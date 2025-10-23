@@ -1,8 +1,10 @@
+
 import React from 'react';
 import { Platform } from 'react-native';
 import { NativeTabs, Icon, Label } from 'expo-router/unstable-native-tabs';
 import { Stack } from 'expo-router';
 import FloatingTabBar, { TabBarItem } from '@/components/FloatingTabBar';
+import { colors } from '@/styles/commonStyles';
 
 export default function TabLayout() {
   // Define the tabs configuration
@@ -10,14 +12,14 @@ export default function TabLayout() {
     {
       name: '(home)',
       route: '/(tabs)/(home)/',
-      icon: 'house.fill',
-      label: 'Home',
+      icon: 'play.circle.fill',
+      label: 'YouTube',
     },
     {
       name: 'profile',
       route: '/(tabs)/profile',
-      icon: 'person.fill',
-      label: 'Profile',
+      icon: 'info.circle.fill',
+      label: 'About',
     },
   ];
 
@@ -25,13 +27,13 @@ export default function TabLayout() {
   if (Platform.OS === 'ios') {
     return (
       <NativeTabs>
-        <NativeTabs.Trigger name="(home)">
-          <Icon sf="house.fill" drawable="ic_home" />
-          <Label>Home</Label>
+        <NativeTabs.Trigger name='(home)'>
+          <Icon sf='play.circle.fill' drawable='ic_home' />
+          <Label>YouTube</Label>
         </NativeTabs.Trigger>
-        <NativeTabs.Trigger name="profile">
-          <Icon sf="person.fill" drawable="ic_profile" />
-          <Label>Profile</Label>
+        <NativeTabs.Trigger name='profile'>
+          <Icon sf='info.circle.fill' drawable='ic_profile' />
+          <Label>About</Label>
         </NativeTabs.Trigger>
       </NativeTabs>
     );
@@ -43,11 +45,11 @@ export default function TabLayout() {
       <Stack
         screenOptions={{
           headerShown: false,
-          animation: 'none', // Remove fade animation to prevent black screen flash
+          animation: 'none',
         }}
       >
-        <Stack.Screen name="(home)" />
-        <Stack.Screen name="profile" />
+        <Stack.Screen name='(home)' />
+        <Stack.Screen name='profile' />
       </Stack>
       <FloatingTabBar tabs={tabs} />
     </>
