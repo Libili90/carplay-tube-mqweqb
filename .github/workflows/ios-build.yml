@@ -1,0 +1,68 @@
+name: Build iOS App
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build iOS
+    runs-on: macos-latest
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: 📦 Install dependencies
+        run: npm install
+      
+      - name: 💎 Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+          bundler-cache: true
+      
+      - name: 🍎 Install CocoaPods
+        run: |
+          cd ios
+          pod install
+          cd ..
+      
+      - name: 🔨 Build iOS App
+        run: |
+          cd ios
+          xcodebuild -workspace CarPlayTube.xcworkspace \
+                     -scheme CarPlayTube \
+                     -configuration Release \
+                     -sdk iphoneos \
+                     -archivePath $PWD/build/CarPlayTube.xcarchive \
+                     archive \
+                     CODE_SIGNING_ALLOWED=NO \
+                     CODE_SIGN_IDENTITY="" \
+                     CODE_SIGNING_REQUIRED=NO
+          
+          xcodebuild -exportArchive \
+                     -archivePath $PWD/build/CarPlayTube.xcarchive \
+                     -exportPath $PWD/build \
+                     -exportOptionsPlist exportOptions.plist
+      
+      - name: 📤 Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: CarPlayTube-iOS
+          path: ios/build/*.ipa
+          retention-days: 30
+
+      - name: ✅ Build Complete
+        run: echo "✅ Build terminé ! Téléchargez l'IPA dans les Artifacts."
