@@ -1,0 +1,5 @@
+platform :ios, '14.0'
+
+target 'CarPlayTube' do
+  use_react_native!
+end
