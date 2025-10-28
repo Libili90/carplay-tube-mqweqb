@@ -1,5 +1,63 @@
-platform :ios, '14.0'
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+   require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-target 'CarPlayTube' do
-  use_react_native!
-end
+   platform :ios, '14.0'
+   install! 'cocoapods', :deterministic_uuids => false
+
+   target 'CarPlayTube' do
+     config = use_native_modules!
+
+     use_react_native!(
+       :path => config[:reactNativePath],
+       :hermes_enabled => true,
+       :fabric_enabled => false,
+       :app_path => "#{Pod::Config.instance.installation_root}/.."
+     )
+
+     post_install do |installer|
+       react_native_post_install(
+         installer,
+         :mac_catalyst_enabled => false
+       )
+     end
+   end
+```
+
+4. Cliquez sur **"Commit new file"**
+
+---
+
+### **Créer un sous-dossier `ios/CarPlayTube/Info.plist` :**
+
+1. Cliquez sur **"Add file" → "Create new file"**
+
+2. Tapez :
+```
+   ios/CarPlayTube/Info.plist
+```
+   ⬆️ Les deux "/" vont créer `ios` puis `CarPlayTube` dedans !
+
+3. Collez le code XML
+
+4. Cliquez sur **"Commit new file"**
+
+---
+
+## 📋 Résumé des dossiers à créer pour votre projet :
+```
+Tapez exactement ça :          GitHub va créer :
+─────────────────────────────  ──────────────────────────
+ios/Podfile                  → Dossier ios/ + fichier Podfile
+ios/CarPlayTube/Info.plist   → Dossiers ios/CarPlayTube/ + fichier Info.plist
+ios/CarPlayTube/AppDelegate.h → Dans le dossier ios/CarPlayTube/
+```
+
+---
+
+## 💡 ASTUCE :
+
+Quand vous tapez le chemin, GitHub affiche le dossier en gris :
+```
+[ios] / [Podfile]
+ ↑       ↑
+ dossier  fichier
