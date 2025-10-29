@@ -35,18 +35,19 @@ jobs:
         with:
           ruby-version: '3.0'
       
-      - name: 🧹 Clean CocoaPods cache
+      - name: 🔧 Patch boost to skip checksum
         run: |
-          rm -rf ~/Library/Caches/CocoaPods
-          rm -rf ~/.cocoapods/repos/trunk/
-          pod repo update
+          BOOST_FILE="node_modules/react-native/third-party-podspecs/boost.podspec"
+          if [ -f "$BOOST_FILE" ]; then
+            sed -i '' 's/:sha256 => .*/:sha256 => "",/g' "$BOOST_FILE"
+          fi
       
       - name: 🍎 Install CocoaPods
         run: |
           cd ios
           pod deintegrate || true
           rm -rf Pods Podfile.lock
-          pod install --repo-update
+          pod install
           cd ..
       
       - name: 🔨 Build iOS App
