@@ -35,12 +35,18 @@ jobs:
         with:
           ruby-version: '3.0'
       
+      - name: 🧹 Clean CocoaPods cache
+        run: |
+          rm -rf ~/Library/Caches/CocoaPods
+          rm -rf ~/.cocoapods/repos/trunk/
+          pod repo update
+      
       - name: 🍎 Install CocoaPods
         run: |
           cd ios
-          pod cache clean boost --all || true
           pod deintegrate || true
-          pod install
+          rm -rf Pods Podfile.lock
+          pod install --repo-update
           cd ..
       
       - name: 🔨 Build iOS App
