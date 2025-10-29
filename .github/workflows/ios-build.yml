@@ -37,8 +37,57 @@ jobs:
       - name: 🍎 Install CocoaPods
         run: |
           cd ios
-          pod install || echo "Pod install a échoué, on continue quand même"
+          pod install
           cd ..
       
-      - name: ✅ Setup Complete
-        run: echo "✅ Configuration terminée !"
+      - name: 🔨 Build iOS App
+        run: |
+          cd ios
+          xcodebuild -workspace CarPlayTube.xcworkspace \
+                     -scheme CarPlayTube \
+                     -configuration Release \
+                     -sdk iphoneos \
+                     -archivePath $PWD/build/CarPlayTube.xcarchive \
+                     archive \
+                     CODE_SIGNING_ALLOWED=NO \
+                     CODE_SIGN_IDENTITY="" \
+                     CODE_SIGNING_REQUIRED=NO
+      
+      - name: 📦 Export IPA
+        run: |
+          cd ios
+          xcodebuild -exportArchive \
+                     -archivePath $PWD/build/CarPlayTube.xcarchive \
+                     -exportPath $PWD/build \
+                     -exportOptionsPlist exportOptions.plist
+      
+      - name: 📤 Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: CarPlayTube-iOS
+          path: ios/build/*.ipa
+          retention-days: 30
+
+      - name: ✅ Build Complete
+        run: echo "🎉 Build terminé ! Téléchargez l'IPA dans les Artifacts."
+```
+
+4. **Commit changes**
+
+---
+
+## 🎯 Après ça :
+
+Le build va prendre **~15 minutes** (au lieu de 1-2 minutes) et vous aurez :
+```
+✅ Set up job
+✅ Checkout code
+✅ Setup Node.js
+✅ Install dependencies
+✅ Generate iOS project
+✅ Setup Ruby
+✅ Install CocoaPods
+✅ Build iOS App          ⬅️ NOUVEAU !
+✅ Export IPA              ⬅️ NOUVEAU !
+✅ Upload IPA              ⬅️ NOUVEAU !
+✅ Complete job
