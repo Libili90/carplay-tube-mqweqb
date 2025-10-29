@@ -27,10 +27,7 @@ jobs:
         run: |
           npx @react-native-community/cli@latest init TempProject --skip-install
           cp -R TempProject/ios/TempProject.xcodeproj ios/CarPlayTube.xcodeproj
-          
-          # Renommer TempProject en CarPlayTube dans le fichier projet
           sed -i '' 's/TempProject/CarPlayTube/g' ios/CarPlayTube.xcodeproj/project.pbxproj
-          
           rm -rf TempProject
       
       - name: 💎 Setup Ruby
@@ -41,6 +38,8 @@ jobs:
       - name: 🍎 Install CocoaPods
         run: |
           cd ios
+          pod cache clean boost --all || true
+          pod deintegrate || true
           pod install
           cd ..
       
