@@ -67,27 +67,6 @@ jobs:
           name: CarPlayTube-iOS
           path: ios/build/*.ipa
           retention-days: 30
-
+      
       - name: ✅ Build Complete
         run: echo "🎉 Build terminé ! Téléchargez l'IPA dans les Artifacts."
-```
-
-4. **Commit changes**
-
----
-
-## 🎯 Après ça :
-
-Le build va prendre **~15 minutes** (au lieu de 1-2 minutes) et vous aurez :
-```
-✅ Set up job
-✅ Checkout code
-✅ Setup Node.js
-✅ Install dependencies
-✅ Generate iOS project
-✅ Setup Ruby
-✅ Install CocoaPods
-✅ Build iOS App          ⬅️ NOUVEAU !
-✅ Export IPA              ⬅️ NOUVEAU !
-✅ Upload IPA              ⬅️ NOUVEAU !
-✅ Complete job
