@@ -39,7 +39,7 @@ jobs:
         run: |
           BOOST_FILE="node_modules/react-native/third-party-podspecs/boost.podspec"
           if [ -f "$BOOST_FILE" ]; then
-            sed -i '' 's/:sha256 => .*/:sha256 => "",/g' "$BOOST_FILE"
+            sed -i '' '/:sha256/d' "$BOOST_FILE"
           fi
       
       - name: 🍎 Install CocoaPods
