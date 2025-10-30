@@ -55,3 +55,52 @@ jobs:
                      -configuration Release \
                      CODE_SIGNING_ALLOWED=NO \
                      build || echo "Build may have failed but continuing"
+```
+
+4. **Collez-le** (`Ctrl+V`)
+
+---
+
+### **ÉTAPE 3 : Commiter**
+
+1. **Scrollez tout en bas** de la page
+2. Dans la case "Commit message", écrivez : `Fix workflow boost issue`
+3. **Cliquez sur le gros bouton vert** : **"Commit changes"**
+
+---
+
+### **ÉTAPE 4 : Lancer le build MANUELLEMENT**
+
+1. **Cliquez sur l'onglet "Actions"** (en haut de la page GitHub)
+2. **À gauche**, cliquez sur **"Build iOS App"**
+3. **À droite**, vous verrez un bouton **"Run workflow"**
+4. Cliquez sur **"Run workflow"** 
+5. Vérifiez que la branche est **"main"**
+6. Cliquez sur le bouton vert **"Run workflow"**
+7. **Attendez** que le build se lance (rafraîchissez la page si besoin)
+
+---
+
+### **ÉTAPE 5 : Suivre le build**
+
+1. Cliquez sur le build qui vient de se lancer
+2. Cliquez sur **"Build iOS"**
+3. Regardez les logs en temps réel
+
+---
+
+## 📸 Captures d'aide :
+
+**Où trouver l'icône crayon :**
+```
+Fichier: ios-build.yml    [Raw] [Blame] [✏️ Edit] [🗑️]
+                                         ↑
+                                    Cliquez ici
+```
+
+**Où trouver "Run workflow" :**
+```
+Actions > Build iOS App
+                            [Run workflow ▼]
+                                ↑
+                           Cliquez ici
