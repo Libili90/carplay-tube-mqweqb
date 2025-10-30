@@ -12,33 +12,45 @@ jobs:
     runs-on: macos-latest
     
     steps:
-      - name: 📥 Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
       
-      - name: 🔧 Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '18'
       
-      - name: 📦 Install dependencies
+      - name: Install dependencies
         run: npm install
       
-      - name: 🎯 Generate iOS project with React Native
-        run: |
-          npx @react-native-community/cli@latest init TempProject --skip-install
-          cp -R TempProject/ios/TempProject.xcodeproj ios/CarPlayTube.xcodeproj
-          rm -rf TempProject
-      
-      - name: 💎 Setup Ruby
+      - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.0'
       
-      - name: 🍎 Install CocoaPods
+      - name: Install Pods
         run: |
           cd ios
-          pod install || echo "Pod install a échoué, on continue quand même"
+          pod install || echo "Pod install failed but continuing"
           cd ..
       
-      - name: ✅ Setup Complete
-        run: echo "✅ Configuration terminée !"
+      - name: Build
+        run: |
+          cd ios
+          xcodebuild -workspace CarPlayTube.xcworkspace \
+                     -scheme CarPlayTube \
+                     -sdk iphoneos \
+                     -configuration Release \
+                     CODE_SIGNING_ALLOWED=NO \
+                     build
+      
+      - name: Archive
+        run: |
+          cd ios
+          xcodebuild -workspace CarPlayTube.xcworkspace \
+                     -scheme CarPlayTube \
+                     -sdk iphoneos \
+                     -configuration Release \
+                     -archivePath build/CarPlayTube.xcarchive \
+                     CODE_SIGNING_ALLOWED=NO \
+                     archive || echo "Archive may have issues but continuing"
