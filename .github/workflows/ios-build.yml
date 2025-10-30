@@ -17,27 +17,10 @@ jobs:
       
       - run: npm install
       
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.0'
-      
-      - name: Install Pods
-        run: cd ios && pod install || true && cd ..
-      
-      - name: Create workspace if needed
-        run: |
-          if [ ! -f "ios/CarPlayTube.xcworkspace/contents.xcworkspacedata" ]; then
-            mkdir -p ios/CarPlayTube.xcworkspace
-            echo '<?xml version="1.0" encoding="UTF-8"?>' > ios/CarPlayTube.xcworkspace/contents.xcworkspacedata
-            echo '<Workspace version="1.0">' >> ios/CarPlayTube.xcworkspace/contents.xcworkspacedata
-            echo '   <FileRef location="group:CarPlayTube.xcodeproj"></FileRef>' >> ios/CarPlayTube.xcworkspace/contents.xcworkspacedata
-            echo '</Workspace>' >> ios/CarPlayTube.xcworkspace/contents.xcworkspacedata
-          fi
-      
       - name: Build
         run: |
           cd ios
-          xcodebuild -workspace CarPlayTube.xcworkspace \
+          xcodebuild -project CarPlayTube.xcodeproj \
                      -scheme CarPlayTube \
                      -sdk iphoneos \
                      -configuration Release \
