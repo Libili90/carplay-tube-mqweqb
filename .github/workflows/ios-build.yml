@@ -1,9 +1,6 @@
 name: Build iOS App
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 jobs:
@@ -12,58 +9,27 @@ jobs:
     runs-on: macos-latest
     
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '18'
       
-      - name: Install dependencies
-        run: npm install
+      - run: npm install
       
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.0'
       
-      - name: Fix boost download issue
-        run: |
-          cd node_modules/react-native/third-party-podspecs
-          curl -L https://boostorg.jfrog.io/artifactory/main/release/1.76.0/source/boost_1_76_0.tar.bz2 -o boost_1_76_0.tar.bz2
-          ACTUAL_SHA=$(shasum -a 256 boost_1_76_0.tar.bz2 | awk '{print $1}')
-          sed -i '' "s/f0397ba6e982c4450f27bf32a2a83292aba035b827a5623a14636ea583318c41/$ACTUAL_SHA/g" boost.podspec
-          rm boost_1_76_0.tar.bz2
-          cd ../../..
-      
       - name: Install Pods
-        run: |
-          cd ios
-          pod install
-          cd ..
+        run: cd ios && pod install && cd ..
       
-      - name: Build and Archive
+      - name: Build
         run: |
           cd ios
           xcodebuild -workspace CarPlayTube.xcworkspace \
                      -scheme CarPlayTube \
                      -sdk iphoneos \
                      -configuration Release \
-                     -archivePath build/CarPlayTube.xcarchive \
                      CODE_SIGNING_ALLOWED=NO \
-                     archive
-      
-      - name: Export IPA
-        run: |
-          cd ios
-          xcodebuild -exportArchive \
-                     -archivePath build/CarPlayTube.xcarchive \
-                     -exportPath build \
-                     -exportOptionsPlist exportOptions.plist
-      
-      - name: Upload IPA
-        uses: actions/upload-artifact@v4
-        with:
-          name: CarPlayTube-iOS
-          path: ios/build/*.ipa
+                     build
